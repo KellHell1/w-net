@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTime;
 use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
@@ -42,10 +43,10 @@ class User
     private ?string $device_id = null;
 
     #[ORM\Column]
-    private \DateTime $createdAt;
+    private DateTime $createdAt;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTime $updatedAt = null;
+    private ?DateTime $updatedAt = null;
 
     #[ORM\OneToMany(targetEntity: UserAddress::class, mappedBy: 'owner', orphanRemoval: true)]
     private Collection $addresses;
@@ -144,19 +145,19 @@ class User
         return $this;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): self
+    public function setCreatedAt(DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
@@ -164,13 +165,13 @@ class User
     #[ORM\PrePersist]
     public function onPrePersist(): void
     {
-        $this->createdAt = new \DateTime('now');
+        $this->createdAt = new DateTime('now');
     }
 
     #[ORM\PreUpdate]
     public function onPreUpdate(): void
     {
-        $this->updatedAt = new \DateTime('now');
+        $this->updatedAt = new DateTime('now');
     }
 
     public function getAddresses(): Collection
@@ -178,7 +179,7 @@ class User
         return $this->addresses;
     }
 
-    public function addAddress(UserAddress $address): static
+    public function addAddress(UserAddress $address): self
     {
         if (!$this->addresses->contains($address)) {
             $this->addresses->add($address);
@@ -188,7 +189,7 @@ class User
         return $this;
     }
 
-    public function removeAddress(UserAddress $address): static
+    public function removeAddress(UserAddress $address): self
     {
         if ($this->addresses->removeElement($address)) {
             if ($address->getOwner() === $this) {

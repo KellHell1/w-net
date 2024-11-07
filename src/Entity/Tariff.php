@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\TariffRepository;
+use DateTime;
 use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Id;
@@ -25,10 +26,10 @@ class Tariff
     private float $price;
 
     #[ORM\Column]
-    private \DateTime $createdAt;
+    private DateTime $createdAt;
 
     #[ORM\Column(nullable: true)]
-    private ?\DateTime $updatedAt = null;
+    private ?DateTime $updatedAt = null;
 
     #[ORM\ManyToMany(targetEntity: Service::class, mappedBy: 'tariffs')]
     private Collection $services;
@@ -72,19 +73,19 @@ class Tariff
         $this->price = $price;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): self
+    public function setCreatedAt(DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }
@@ -92,13 +93,13 @@ class Tariff
     #[ORM\PrePersist]
     public function onPrePersist(): void
     {
-        $this->createdAt = new \DateTime('now');
+        $this->createdAt = new DateTime('now');
     }
 
     #[ORM\PreUpdate]
     public function onPreUpdate(): void
     {
-        $this->updatedAt = new \DateTime('now');
+        $this->updatedAt = new DateTime('now');
     }
 
     public function getServices(): Collection
@@ -106,7 +107,7 @@ class Tariff
         return $this->services;
     }
 
-    public function addService(Service $service): static
+    public function addService(Service $service): self
     {
         if (!$this->services->contains($service)) {
             $this->services->add($service);
@@ -116,7 +117,7 @@ class Tariff
         return $this;
     }
 
-    public function removeService(Service $service): static
+    public function removeService(Service $service): self
     {
         if ($this->services->removeElement($service)) {
             $service->removeTariff($this);
