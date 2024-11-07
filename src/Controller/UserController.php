@@ -16,7 +16,7 @@ class UserController extends AbstractController
     #[Route(path: 'users/{id}', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function get(int $id): JsonResponse
     {
-        $data = $this->userService->getData($id);
+        $data = $this->userService->getWithDetails($id);
 
         return new JsonResponse($data);
     }

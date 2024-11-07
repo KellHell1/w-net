@@ -2,21 +2,21 @@
 
 namespace App\Service;
 
-use App\Entity\User;
-use App\Entity\UserAddress;
-use App\Enums\ServiceTypeEnum;
 use App\Repository\UserRepository;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 readonly class UserService
 {
-    public function __construct(private UserRepository $userRepository)
+    public function __construct(private UserRepository $userRepository, private UserAddressService $userAddressService)
     {
     }
 
-    public function getData(int $userId): array
+    public function getWithDetails(int $id)
     {
-        $user = $this->userRepository->findUserWithDetails($userId)
-            ?? throw new \Exception('User not found');
+        $user = $this->userRepository->findUserWithDetails($id);
+        if (null === $user) {
+            $this->throwNotFoundException('User not exist');
+        }
 
         return [
             'username' => $user->getUsername(),
@@ -25,33 +25,12 @@ readonly class UserService
             'language' => $user->getLanguage(),
             'theme' => $user->getTheme(),
             'deviceId' => $user->getDeviceId(),
-            'addresses' => $this->getAddresses($user),
+            'addresses' => $this->userAddressService->getAddresses($user),
         ];
     }
 
-    private function getAddresses(User $user): array
+    private function throwNotFoundException(string $message): void
     {
-        return array_map(fn ($address) => $this->getAddressData($address), $user->getAddresses()->toArray());
-    }
-
-    private function getAddressData(UserAddress $address): array
-    {
-        return [
-            'address' => $address->getAddress(),
-            'status' => $address->getStatus(),
-            'tariff' => $address->getTariff()->getName(),
-            'balance' => $address->getBalance(),
-            'services' => $this->getAddressServices($address),
-        ];
-    }
-
-    private function getAddressServices(UserAddress $address): array
-    {
-        return array_reduce($address->getTariff()->getServices()->toArray(), function ($services, $service) {
-            $serviceType = ServiceTypeEnum::from($service->getType())->name;
-            $services[$serviceType] = $service->getDescription();
-
-            return $services;
-        }, []);
+        throw new NotFoundHttpException($message);
     }
 }
