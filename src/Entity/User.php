@@ -3,30 +3,34 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
+#[UniqueConstraint(name: "email", columns: ["email"])]
+#[ORM\Table(name: 'users')]
+#[ORM\HasLifecycleCallbacks]
 class User
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id = null;
+    private int $id;
 
     #[ORM\Column(length: 255)]
-    private ?string $username = null;
+    private string $username;
 
     #[ORM\Column(length: 255)]
-    private ?string $password = null;
+    private string $password;
 
     #[ORM\Column(length: 20)]
-    private ?string $phone = null;
+    private string $phone;
 
     #[ORM\Column(length: 255)]
-    private ?string $email = null;
+    private string $email;
 
-    #[ORM\Column(length: 2)]
+    #[ORM\Column(length: 2, options: ['default' => 'en'])]
     private ?string $language = null;
 
     #[ORM\Column(length: 50, nullable: true)]
@@ -35,65 +39,71 @@ class User
     #[ORM\Column(length: 36, nullable: true)]
     private ?string $device_id = null;
 
-    public function getId(): ?int
+    #[ORM\Column]
+    private DateTime $createdAt;
+
+    #[ORM\Column(nullable: true)]
+    private ?DateTime $updatedAt = null;
+
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getUsername(): ?string
+    public function getUsername(): string
     {
         return $this->username;
     }
 
-    public function setUsername(string $username): static
+    public function setUsername(string $username): self
     {
         $this->username = $username;
 
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
         return $this;
     }
 
-    public function getPhone(): ?string
+    public function getPhone(): string
     {
         return $this->phone;
     }
 
-    public function setPhone(string $phone): static
+    public function setPhone(string $phone): self
     {
         $this->phone = $phone;
 
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function setEmail(string $email): static
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
         return $this;
     }
 
-    public function getLanguage(): ?string
+    public function getLanguage(): string
     {
         return $this->language;
     }
 
-    public function setLanguage(string $language): static
+    public function setLanguage(string $language): self
     {
         $this->language = $language;
 
@@ -105,7 +115,7 @@ class User
         return $this->theme;
     }
 
-    public function setTheme(?string $theme): static
+    public function setTheme(?string $theme): self
     {
         $this->theme = $theme;
 
@@ -117,10 +127,39 @@ class User
         return $this->device_id;
     }
 
-    public function setDeviceId(?string $device_id): static
+    public function setDeviceId(?string $device_id): self
     {
         $this->device_id = $device_id;
 
         return $this;
+    }
+
+    public function getCreatedAt(): DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(DateTime $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    #[ORM\PrePersist]
+    public function onPrePersist(): void
+    {
+        $this->createdAt = new DateTime("now");
+    }
+
+    #[ORM\PreUpdate]
+    public function onPreUpdate(): void
+    {
+        $this->updatedAt = new DateTime("now");
     }
 }
