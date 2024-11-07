@@ -4,7 +4,6 @@ RUN apt update \
     && apt install -y --no-install-recommends \
         zlib1g-dev \
         g++ \
-        git \
         libicu-dev \
         zip \
         libzip-dev \
