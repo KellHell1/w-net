@@ -14,7 +14,7 @@ readonly class UserService
     public function getWithDetails(int $id): array
     {
         $user = $this->userRepository->findUserWithDetails($id);
-        if (null === $user) {
+        if ($user === null) {
             $this->throwNotFoundException('User not exist');
         }
 
