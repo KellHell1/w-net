@@ -31,6 +31,9 @@ class Service
     #[ORM\Column(type: Types::SMALLINT)]
     private int $type;
 
+    #[ORM\Column(length: 255)]
+    private string $name;
+
     #[ORM\Column(length: 500, nullable: true)]
     private ?string $description = null;
 
@@ -84,6 +87,16 @@ class Service
         $this->type = $type;
 
         return $this;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 
     public function getDescription(): ?string

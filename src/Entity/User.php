@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 
@@ -23,7 +25,7 @@ class User
     #[ORM\Column(length: 255)]
     private string $password;
 
-    #[ORM\Column(length: 20)]
+    #[ORM\Column(length: 15)]
     private string $phone;
 
     #[ORM\Column(length: 255)]
@@ -43,6 +45,14 @@ class User
 
     #[ORM\Column(nullable: true)]
     private ?\DateTime $updatedAt = null;
+
+    #[ORM\OneToMany(targetEntity: UserAddress::class, mappedBy: 'owner', orphanRemoval: true)]
+    private Collection $addresses;
+
+    public function __construct()
+    {
+        $this->addresses = new ArrayCollection();
+    }
 
     public function getId(): int
     {
@@ -160,5 +170,34 @@ class User
     public function onPreUpdate(): void
     {
         $this->updatedAt = new \DateTime('now');
+    }
+
+    /**
+     * @return Collection<int, UserAddress>
+     */
+    public function getAddresses(): Collection
+    {
+        return $this->addresses;
+    }
+
+    public function addAddress(UserAddress $address): static
+    {
+        if (!$this->addresses->contains($address)) {
+            $this->addresses->add($address);
+            $address->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAddress(UserAddress $address): static
+    {
+        if ($this->addresses->removeElement($address)) {
+            if ($address->getOwner() === $this) {
+                $address->setOwner(null);
+            }
+        }
+
+        return $this;
     }
 }

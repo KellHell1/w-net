@@ -32,6 +32,10 @@ class UserAddress
     #[ORM\Column(nullable: true)]
     private ?\DateTime $updatedAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'addresses')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $owner = null;
+
     public function getAddress(): string
     {
         return $this->address;
@@ -107,5 +111,17 @@ class UserAddress
     public function onPreUpdate(): void
     {
         $this->updatedAt = new \DateTime('now');
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): static
+    {
+        $this->owner = $owner;
+
+        return $this;
     }
 }
