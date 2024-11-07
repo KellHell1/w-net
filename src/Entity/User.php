@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\UserRepository;
@@ -171,9 +173,6 @@ class User
         $this->updatedAt = new \DateTime('now');
     }
 
-    /**
-     * @return Collection<int, UserAddress>
-     */
     public function getAddresses(): Collection
     {
         return $this->addresses;

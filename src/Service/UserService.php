@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Repository\UserRepository;
@@ -7,9 +9,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 readonly class UserService
 {
-    public function __construct(private UserRepository $userRepository, private UserAddressService $userAddressService)
-    {
-    }
+    public function __construct(private UserRepository $userRepository, private UserAddressService $userAddressService) {}
 
     public function getWithDetails(int $id): array
     {

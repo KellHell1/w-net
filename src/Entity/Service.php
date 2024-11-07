@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\ServiceRepository;
@@ -23,7 +25,7 @@ class Service
     #[ORM\JoinTable(
         name: 'tariff_services',
         joinColumns: [new ORM\JoinColumn(name: 'service_id', referencedColumnName: 'id')],
-        inverseJoinColumns: [new ORM\JoinColumn(name: 'tariff_name', referencedColumnName: 'name')]
+        inverseJoinColumns: [new ORM\JoinColumn(name: 'tariff_name', referencedColumnName: 'name')],
     )]
     private Collection $tariffs;
 
@@ -52,9 +54,6 @@ class Service
         return $this->id;
     }
 
-    /**
-     * @return Collection<int, Tariff>
-     */
     public function getTariffs(): Collection
     {
         return $this->tariffs;

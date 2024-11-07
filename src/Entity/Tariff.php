@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\TariffRepository;
@@ -99,9 +101,6 @@ class Tariff
         $this->updatedAt = new \DateTime('now');
     }
 
-    /**
-     * @return Collection<int, Service>
-     */
     public function getServices(): Collection
     {
         return $this->services;

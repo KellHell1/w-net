@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
 use App\Entity\{User, UserAddress};
@@ -9,7 +11,7 @@ class UserAddressService
 {
     public function getAddresses(User $user): array
     {
-        return array_map(fn ($address) => $this->prepareAddressData($address), $user->getAddresses()->toArray());
+        return array_map(fn($address) => $this->prepareAddressData($address), $user->getAddresses()->toArray());
     }
 
     public function prepareAddressData(UserAddress $address): array
@@ -25,7 +27,7 @@ class UserAddressService
 
     private function getAddressServices(UserAddress $address): array
     {
-        return array_reduce($address->getTariff()->getServices()->toArray(), function ($services, $service) {
+        return array_reduce($address->getTariff()->getServices()->toArray(), static function ($services, $service) {
             $serviceType = ServiceTypeEnum::from($service->getType())->name;
             $services[$serviceType] = $service->getName();
 
