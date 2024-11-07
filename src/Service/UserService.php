@@ -11,7 +11,7 @@ readonly class UserService
     {
     }
 
-    public function getWithDetails(int $id)
+    public function getWithDetails(int $id): array
     {
         $user = $this->userRepository->findUserWithDetails($id);
         if (null === $user) {

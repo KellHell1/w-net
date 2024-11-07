@@ -3,8 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\{ArrayCollection, Collection};
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 
@@ -32,12 +31,12 @@ class User
     private string $email;
 
     #[ORM\Column(length: 2, options: ['default' => 'en'])]
-    private ?string $language = null;
+    private string $language;
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $theme = null;
 
-    #[ORM\Column(length: 36, nullable: true)]
+    #[ORM\Column(type: 'uuid', nullable: true)]
     private ?string $device_id = null;
 
     #[ORM\Column]

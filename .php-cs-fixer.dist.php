@@ -1,13 +1,14 @@
 <?php
 
-$finder = (new PhpCsFixer\Finder())
-    ->in(__DIR__)
-    ->exclude('var')
-;
+use PhpCsFixer\{Config, Finder};
 
-return (new PhpCsFixer\Config())
+$finder = Finder::create()
+    ->in(__DIR__)
+    ->exclude('var');
+
+return (new Config())
     ->setRules([
-        '@Symfony' => true,
+        '@PSR12' => true,
+        'ordered_imports' => true,
     ])
-    ->setFinder($finder)
-;
+    ->setFinder($finder);

@@ -2,9 +2,8 @@
 
 namespace App\Service;
 
-use App\Entity\User;
-use App\Entity\UserAddress;
-use App\Enums\ServiceTypeEnum;
+use App\Entity\{User, UserAddress};
+use App\Enums\{AddressStatusEnum, ServiceTypeEnum};
 
 class UserAddressService
 {
@@ -17,7 +16,7 @@ class UserAddressService
     {
         return [
             'address' => $address->getAddress(),
-            'status' => $address->getStatus(),
+            'status' => AddressStatusEnum::from($address->getStatus())->name,
             'tariff' => $address->getTariff()->getName(),
             'balance' => $address->getBalance(),
             'services' => $this->getAddressServices($address),
@@ -28,7 +27,7 @@ class UserAddressService
     {
         return array_reduce($address->getTariff()->getServices()->toArray(), function ($services, $service) {
             $serviceType = ServiceTypeEnum::from($service->getType())->name;
-            $services[$serviceType] = $service->getDescription();
+            $services[$serviceType] = $service->getName();
 
             return $services;
         }, []);

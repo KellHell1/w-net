@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserAddressRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 
@@ -16,8 +17,8 @@ class UserAddress
     #[ORM\Column(length: 255)]
     private string $address;
 
-    #[ORM\Column(length: 20)]
-    private ?string $status = null;
+    #[ORM\Column(type: Types::SMALLINT)]
+    private int $status;
 
     #[ORM\ManyToOne(targetEntity: Tariff::class)]
     #[ORM\JoinColumn(name: 'tariff_name', referencedColumnName: 'name')]
@@ -34,7 +35,7 @@ class UserAddress
 
     #[ORM\ManyToOne(inversedBy: 'addresses')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $owner = null;
+    private User $owner;
 
     public function getAddress(): string
     {
@@ -48,12 +49,12 @@ class UserAddress
         return $this;
     }
 
-    public function getStatus(): string
+    public function getStatus(): int
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): self
+    public function setStatus(int $status): self
     {
         $this->status = $status;
 
@@ -113,12 +114,12 @@ class UserAddress
         $this->updatedAt = new \DateTime('now');
     }
 
-    public function getOwner(): ?User
+    public function getOwner(): User
     {
         return $this->owner;
     }
 
-    public function setOwner(?User $owner): static
+    public function setOwner(User $owner): static
     {
         $this->owner = $owner;
 
