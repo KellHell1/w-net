@@ -3,12 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\UserAddressRepository;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 
 #[ORM\Entity(repositoryClass: UserAddressRepository::class)]
-#[UniqueConstraint(name: "address", columns: ["address"])]
+#[UniqueConstraint(name: 'address', columns: ['address'])]
 #[ORM\Table(name: 'user_addresses')]
 #[ORM\HasLifecycleCallbacks]
 class UserAddress
@@ -28,10 +27,10 @@ class UserAddress
     private float $balance = 0;
 
     #[ORM\Column]
-    private DateTime $createdAt;
+    private \DateTime $createdAt;
 
     #[ORM\Column(nullable: true)]
-    private ?DateTime $updatedAt = null;
+    private ?\DateTime $updatedAt = null;
 
     public function getAddress(): string
     {
@@ -41,6 +40,7 @@ class UserAddress
     public function setAddress(string $address): self
     {
         $this->address = $address;
+
         return $this;
     }
 
@@ -52,6 +52,7 @@ class UserAddress
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
         return $this;
     }
 
@@ -63,6 +64,7 @@ class UserAddress
     public function setTariff(Tariff $tariff): self
     {
         $this->tariff = $tariff;
+
         return $this;
     }
 
@@ -74,22 +76,23 @@ class UserAddress
     public function setBalance(float $balance): self
     {
         $this->balance = $balance;
+
         return $this;
     }
 
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt): self
+    public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTime
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
@@ -97,12 +100,12 @@ class UserAddress
     #[ORM\PrePersist]
     public function onPrePersist(): void
     {
-        $this->createdAt = new DateTime("now");
+        $this->createdAt = new \DateTime('now');
     }
 
     #[ORM\PreUpdate]
     public function onPreUpdate(): void
     {
-        $this->updatedAt = new DateTime("now");
+        $this->updatedAt = new \DateTime('now');
     }
 }

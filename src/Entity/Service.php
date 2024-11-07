@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ServiceRepository;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -11,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 #[ORM\Table(name: 'services', uniqueConstraints: [
-    new ORM\UniqueConstraint(name: 'unique_type_name', columns: ['type', 'name'])
+    new ORM\UniqueConstraint(name: 'unique_type_name', columns: ['type', 'name']),
 ])]
 #[ORM\HasLifecycleCallbacks]
 class Service
@@ -36,10 +35,10 @@ class Service
     private ?string $description = null;
 
     #[ORM\Column]
-    private DateTime $createdAt;
+    private \DateTime $createdAt;
 
     #[ORM\Column(nullable: true)]
-    private ?DateTime $updatedAt = null;
+    private ?\DateTime $updatedAt = null;
 
     public function __construct()
     {
@@ -99,19 +98,19 @@ class Service
         return $this;
     }
 
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt): self
+    public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTime
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
@@ -119,12 +118,12 @@ class Service
     #[ORM\PrePersist]
     public function onPrePersist(): void
     {
-        $this->createdAt = new DateTime("now");
+        $this->createdAt = new \DateTime('now');
     }
 
     #[ORM\PreUpdate]
     public function onPreUpdate(): void
     {
-        $this->updatedAt = new DateTime("now");
+        $this->updatedAt = new \DateTime('now');
     }
 }

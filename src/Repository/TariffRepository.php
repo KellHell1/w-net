@@ -20,5 +20,4 @@ class TariffRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Tariff::class);
     }
-
 }

@@ -3,12 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueConstraint(name: "email", columns: ["email"])]
+#[UniqueConstraint(name: 'email', columns: ['email'])]
 #[ORM\Table(name: 'users')]
 #[ORM\HasLifecycleCallbacks]
 class User
@@ -40,10 +39,10 @@ class User
     private ?string $device_id = null;
 
     #[ORM\Column]
-    private DateTime $createdAt;
+    private \DateTime $createdAt;
 
     #[ORM\Column(nullable: true)]
-    private ?DateTime $updatedAt = null;
+    private ?\DateTime $updatedAt = null;
 
     public function getId(): int
     {
@@ -134,19 +133,19 @@ class User
         return $this;
     }
 
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt): self
+    public function setCreatedAt(\DateTime $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?DateTime
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
@@ -154,12 +153,12 @@ class User
     #[ORM\PrePersist]
     public function onPrePersist(): void
     {
-        $this->createdAt = new DateTime("now");
+        $this->createdAt = new \DateTime('now');
     }
 
     #[ORM\PreUpdate]
     public function onPreUpdate(): void
     {
-        $this->updatedAt = new DateTime("now");
+        $this->updatedAt = new \DateTime('now');
     }
 }
